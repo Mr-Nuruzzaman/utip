@@ -6,6 +6,7 @@ import 'package:utip/widgets/bill_amount_feild.dart';
 import 'package:utip/widgets/person_counter.dart';
 import 'package:utip/widgets/tip_count.dart';
 import 'package:utip/widgets/tip_slider.dart';
+import 'package:utip/widgets/toggle_theme_button.dart';
 import 'package:utip/widgets/total_per_person.dart';
 
 void main() {
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'UTip App',
       theme: themeProvider.currentTheme,
+      debugShowCheckedModeBanner: false,
       // theme: ThemeData(
       //   colorScheme: ColorScheme.fromSeed(
       //       seedColor: const Color.fromARGB(255, 174, 163, 192)),
@@ -51,7 +53,6 @@ class _UTipState extends State<UTip> {
     double total = model.totalPerPerson;
     var theme = Theme.of(context);
 
-    final themeProvider = Provider.of<ThemeProvider>(context);
     // print("Curent Theme: ${themeProvider.currentTheme.toString()}");
     final style = theme.textTheme.titleMedium!.copyWith(
         color: theme.colorScheme.onPrimary, fontWeight: FontWeight.bold);
@@ -61,18 +62,7 @@ class _UTipState extends State<UTip> {
           actions: [
             StatefulBuilder(
               builder: (context, setState) {
-                return IconButton(
-                  icon: Icon(
-                    themeProvider.isDarkMode
-                        ? Icons.sunny
-                        : Icons.nightlight_round,
-                    color: const Color.fromARGB(255, 209, 201, 201),
-                  ),
-                  iconSize: 30.0,
-                  onPressed: () {
-                    themeProvider.toggleTheme();
-                  },
-                );
+                return const ToggleThemeButton();
               },
             ),
           ],
@@ -115,6 +105,11 @@ class _UTipState extends State<UTip> {
                           total: total,
                           personCount: model.personCount,
                           billTotal: model.billTotal),
+
+                      Text(
+                        "${model.tipPercentage * 100}%",
+                        style: theme.textTheme.titleMedium,
+                      ),
                       //slider section
                       TipSlider(
                         tipPercentage: model.tipPercentage,
